@@ -18,6 +18,10 @@ src/analysis/mlflow.db
 # Local run tracking (MLflow runs)
 mlruns/
 
+# Large exported datasets for BI
+bi_exports/*.csv
+
 # Operating system files
 .DS_Store
 Thumbs.db
+
