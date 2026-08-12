@@ -1,0 +1,23 @@
+# Python virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Local SQLite databases (Github limits files to 100MB; retail_dw.db is ~106MB)
+*.db
+src/data/retail_dw.db
+src/analysis/mlflow.db
+
+# IDE and agent files
+.agents/
+.claude/
+.gemini/
+.idea/
+.vscode/
+
+# Local run tracking (MLflow runs)
+mlruns/
+
+# Operating system files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,44 @@
+name: Enterprise MLOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  data-quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv (Fast Dependency Manager)
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Install Dependencies
+        run: uv sync
+
+      - name: Run Data Quality Checks (Data Contract)
+        run: uv run src/data/data_quality_checks.py
+
+  build-and-push-podman:
+    needs: data-quality-gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Container with Podman
+        run: podman build -t mlops-churn-api:latest -f Containerfile .
+        
+      # In a real environment, you would push this to AWS ECR or Docker Hub
+      # - name: Push to Registry
+      #   run: podman push mlops-churn-api:latest docker://<registry_url>/mlops-churn-api:latest
